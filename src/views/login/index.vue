@@ -29,7 +29,6 @@
 </template>
 
 <script>
-// import { log } from 'util'
 export default {
   // 1 在data中定义表单数据对象
   data () {
@@ -57,27 +56,49 @@ export default {
             message: '验证码格式不正确'
           }
         ],
-        check: [{ validator: function (rule, value, callback) {
-          // rule当前的规则对象 没什么用
-          // value指的是我们要校验的字段的值
-          if (value) {
-            // 认为校验通过
-            callback() // 执行callback 认为通过
-          } else {
-            // 认为校验不通过 要提示信息
-            callback(new Error('您必须无条件同意被我们坑'))
+        check: [
+          {
+            validator: function (rule, value, callback) {
+              // rule当前的规则对象 没什么用
+              // value指的是我们要校验的字段的值
+              if (value) {
+                // 认为校验通过
+                callback() // 执行callback 认为通过
+              } else {
+                // 认为校验不通过 要提示信息
+                callback(new Error('您必须无条件同意被我们坑'))
+              }
+            }
           }
-        } }]
+        ]
       }
     }
   },
   methods: {
     submitLogin () {
       //
-      this.$refs.myForm.validate(function (isOK) {
+      this.$refs.myForm.validate(isOK => {
         if (isOK) {
           // 认为前端校验登录表单成功
+          // 地址参数 查询参数 params 对象
+          // body参数 data对象
+          // console.log(this)
           console.log('前端校验成功,发送用户名和密码到后台去校验')
+          this.$axios({
+            url: '/authorizations', // 请求地址
+            method: 'post',
+            data: this.loginForm
+          })
+            .then(result => {
+              // 成功会进入到then
+              window.localStorage.setItem('user-token', result.data.data.token) // 前端缓存令牌
+              this.$router.push('/home') //
+            }).catch(() => {
+              this.$message({
+                message: '警告哦，这是一条警告消息',
+                type: 'warning'
+              })
+            })
         }
       })
     }
