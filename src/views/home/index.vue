@@ -1,7 +1,19 @@
 <template>
-  <div>
-      主页
-  </div>
+  <!-- 放置一个外层容器 -->
+  <el-container>
+    <!-- 左右布局 -->
+    <el-aside>左侧</el-aside>
+    <!-- 再放一个container -->
+    <el-container>
+      <!-- 上下布局 -->
+      <el-header>
+        头部
+      </el-header>
+      <el-main>
+        主要
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
