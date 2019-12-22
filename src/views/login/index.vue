@@ -76,14 +76,14 @@ export default {
   },
   methods: {
     submitLogin () {
-      //
+      // 提交登录表单
       this.$refs.myForm.validate(isOK => {
         if (isOK) {
           // 认为前端校验登录表单成功
           // 地址参数 查询参数 params 对象
           // body参数 data对象
           // console.log(this)
-          console.log('前端校验成功,发送用户名和密码到后台去校验')
+          // console.log('前端校验成功,发送用户名和密码到后台去校验')
           this.$axios({
             url: '/authorizations', // 请求地址
             method: 'post',
@@ -91,13 +91,14 @@ export default {
           })
             .then(result => {
               // 成功会进入到then
-              window.localStorage.setItem('user-token', result.data.data.token) // 前端缓存令牌
-              this.$router.push('/home') //
-            }).catch(() => {
-              this.$message({
-                message: '警告哦，这是一条警告消息',
-                type: 'warning'
-              })
+              window.localStorage.setItem('user-token', result.data.token) // 前端缓存令牌
+              this.$router.push('/home') // 跳转主页
+            // })
+            // .catch(() => {
+            //   this.$message({
+            //     message: '您的用户名或验证码错误',
+            //     type: 'warning'
+            //   })
             })
         }
       })

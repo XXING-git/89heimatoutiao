@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <!-- 一级路由容器 -->
     <router-view/>
   </div>
