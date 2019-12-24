@@ -9,7 +9,7 @@ const routes = [
   {
     // 强制跳转
     path: '/',
-    redirect: '/home'
+    redirect: '/login'
   },
   {
     // 主页
@@ -25,7 +25,7 @@ const routes = [
       component: () => import('../views/comment') // 按需加载
     }, {
       path: 'material', // 素材列表
-      component: () => ('../views/material') // 按需加载
+      component: () => import('../views/material') // 按需加载
     }]
   }, {
     // 登录页
