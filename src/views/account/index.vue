@@ -3,9 +3,9 @@
       <bread-crumb slot='header'>
          <template slot='title'>账户信息</template>
       </bread-crumb>
-            <!-- 放置上传组件 -->
+      <!-- 放置上传组件 -->
       <el-upload class='head-upload' action="" :show-file-list="false">
-          <img src="../../assets/img/head.jpeg" alt="">
+          <img src="../../assets/img/q39.jpg" alt="">
       </el-upload>
       <!-- 放置组件 -->
      <el-form style="margin-left:100px" label-width="100px">
