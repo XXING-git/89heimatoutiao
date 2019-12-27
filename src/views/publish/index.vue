@@ -17,23 +17,24 @@
       <el-form-item prop="content" label="内容">
         <el-input v-model="formData.content" type="textarea" :rows="4"></el-input>
       </el-form-item>
-        <el-form-item prop="type" label="封面">
-          <!-- 单选组  v-model="封面类型" -->
-          <el-radio-group v-model="formData.cover.type">
-            <el-radio :label="1">单图</el-radio>
-            <el-radio :label="3">三图</el-radio>
-            <el-radio :label="0">无图</el-radio>
-            <el-radio :label="-1">自动</el-radio>
+      <el-form-item prop="type" label="封面">
+        <!-- 单选组  v-model="封面类型" -->
+        <el-radio-group v-model="formData.cover.type">
+          <el-radio :label="1">单图</el-radio>
+          <el-radio :label="3">三图</el-radio>
+          <el-radio :label="0">无图</el-radio>
+          <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
-        <el-form-item prop="channel_id" label="频道">
-          <el-select v-model="formData.channel_id">
+      <el-form-item prop="channel_id" label="频道">
+        <el-select v-model="formData.channel_id">
           <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-          <el-button @click="publishArticle" type='primary'>发布</el-button>
-          <el-button @click="publishArticle">存入草稿</el-button>
+        <!-- @事件名="方法" =>有默认参数 => 方法()  => 方法() =>一个参数都没有 -->
+        <el-button @click="publishArticle()" type="primary">发布</el-button>
+        <el-button @click="publishArticle(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -55,9 +56,14 @@ export default {
       },
       publishRules: {
         // 校验规则对象 min  max
-        title: [{ required: true, message: '标题内容不能为空' }, {
-          min: 5, max: 30, message: '标题长度需要在5到30字符之间'
-        }],
+        title: [
+          { required: true, message: '标题内容不能为空' },
+          {
+            min: 5,
+            max: 30,
+            message: '标题长度需要在5到30字符之间'
+          }
+        ],
         content: [{ required: true, message: '文章内容不能为空' }],
         channel_id: [{ required: true, message: '频道分类不能为空' }]
       }
@@ -73,11 +79,19 @@ export default {
       })
     },
     // 发布文章
-    publishArticle () {
-      this.$refs.publishForm.validate(function (isOK) {
+    publishArticle (draft) {
+      this.$refs.publishForm.validate((isOK) => {
         if (isOK) {
           // 可以去进行 发布接口调用
-          console.log('校验成功')
+          this.$axios({
+            url: '/articles',
+            method: 'post',
+            params: { draft }, // query参数
+            data: this.formData
+          }).then(() => {
+            // 新增成功 => 应该去内容列表
+            this.$router.push('/home/articles') // 回到内容列表
+          })
         }
       })
     }
