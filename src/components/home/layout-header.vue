@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus' // 引入公共实例
 export default {
   data () {
     return {
@@ -40,17 +41,31 @@ export default {
     // let token = window.localStorage
     //   .getItem('user-token')
     // 查询数据
-    this.$axios({
-      url: '/user/profile'
-      // headers参数
-      // headers: {
-      //   Authorization: `Bearer ${token}`
-      // }
-    }).then(result => {
-      this.userInfo = result.data // 获取个人信息
+    // this.$axios({
+    //   url: '/user/profile'
+    //   // headers参数
+    //   // headers: {
+    //   //   Authorization: `Bearer ${token}`
+    //   // }
+    // }).then(result => {
+    //   this.userInfo = result.data // 获取个人信息
+    // })
+    this.getUserInfo()
+    // 实例创建完毕 立刻监听
+    eventBus.$on('updateUserInfoSuccess', () => {
+      // 别人告诉你 它更新了数据 应该立刻处理
+      this.getUserInfo()
     })
   },
   methods: {
+    getUserInfo () {
+      this.$axios({
+        url: '/user/profile'
+      //   headers参数
+      }).then(result => {
+        this.userInfo = result.data // 获取用户个人信息
+      })
+    },
     hendle (commad) {
       // 区分点击的菜单项
       if (commad === 'lgout') {
@@ -59,6 +74,8 @@ export default {
         this.$router.push('/login')
       } else if (commad === 'git') {
         window.location.href = 'https://github.com/XXING-git/89heimatoutiao'
+      } else if (commad === 'info') {
+        this.$router.push('/home/account') // 跳转账户信息页面
       }
     }
   }
