@@ -82,10 +82,10 @@
       <!-- 右侧 -->
       <el-col :span="6">
         <el-row class="right" type="flex" justify="end">
-          <span>
+          <span @click="toModify(item.id)">
             <i class="el-icon-edit"></i>修改
           </span>
-          <span>
+          <span @click="delArticle(item.id)">
             <i class="el-icon-delete"></i> 删除
           </span>
         </el-row>
@@ -95,6 +95,10 @@
 </template>
 
 <script>
+/****
+ * created by  gaoly 2019-11-23
+ * modify  by  zhangsan 2019-12-23
+ * *******/
 export default {
   data () {
     return {
@@ -153,6 +157,28 @@ export default {
     }
   },
   methods: {
+    // 修改页面
+    toModify (id) {
+      this.$router.push(`/home/publish/${id.toString()}`) // 到发布页面
+    },
+    // 删除文章
+    delArticle (id) {
+      // 所有已发布的文章是不可以删除的  只有草稿才可以删除
+      this.$confirm('您是否要删除这个文章?').then(() => {
+        // 直接删除
+        this.$axios({
+          method: 'delete',
+          url: `/articles/${id.toString()}`
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除文章成功!'
+          })
+          // this.page.currentPage = 1 // 如果想回第一个页 就赋值 为1 否则不用管
+          this.getConditionArticle() // 重新调用
+        })
+      })
+    },
     // 改变条件
     changeCondition () {
       // 组装条件
